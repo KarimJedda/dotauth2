@@ -1,0 +1,48 @@
+server_name: "localhost"
+public_baseurl: "http://localhost:8008/"
+
+pid_file: /data/homeserver.pid
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: sqlite3
+  args:
+    database: /data/homeserver.db
+
+log_config: "/data/localhost.log.config"
+media_store_path: /data/media_store
+registration_shared_secret: "p@RNedUgAkSC.eA#3aP56JE3-sEbDDBEFcu2TrkNVxBnd,.oBF"
+report_stats: false
+macaroon_secret_key: "*vjI5&jJC=z1vT5R0_FgwitVy~A652N^V4&4dbc+3yIl^2&lM*"
+form_secret: "k=_:M;8ALVQhwGO^B^DGB;Ir_sU45EBrJLFB*Iqsj=BMAKF^&8"
+signing_key_path: "/data/localhost.signing.key"
+
+trusted_key_servers:
+  - server_name: "matrix.org"
+
+password_config:
+   enabled: false
+
+use_insecure_ssl_client_just_for_testing_do_not_use: true
+
+oidc_providers:
+  - idp_id: custom_auth
+    idp_name: Sign in with Polkadot!
+    issuer: "http://localhost:5000"
+    client_id: "123456"
+    client_secret: "2c0c5502258bec795333828e3d7548b8"
+    scopes: ["openid", "profile", "email"]
+    allow_existing_users: true
+    user_mapping_provider:
+      config:
+        localpart_template: "{{ user.preferred_username }}"
+        display_name_template: "{{ user.name }}"
+    skip_verification: true
+
